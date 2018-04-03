@@ -15,6 +15,9 @@ class DynamicArray
   #
   # BTW: check out the protected methods and attr declarations.
   def initialize
+    @store = StaticArray.new(8)
+    @length = 0
+    
   end
 
   # O(1) ammortized; O(n) worst case. Variable because of the possible
@@ -22,19 +25,28 @@ class DynamicArray
   def push(val)
     # Don't worry about resizing until the end of the specs. Assume
     # capacity is sufficient at first.
+    @store[length] = val 
+    @length += 1 
   end
 
   # O(1)
   def [](index)
+    check_index(index)
+    @store[index]
   end
 
   # O(1)
   def pop
+    a = @store[length]
+    @store[length] = nil 
+    return a 
     # No "shrinking" is required nor typical.
   end
 
   # O(1)
   def []=(index, value)
+    check_index(index)
+    @store[index] = value
   end
 
   # O(n): has to shift over all the elements. (Hint: when shifting over
@@ -55,10 +67,12 @@ class DynamicArray
   # Capacity of number of items the store can store at maximum.
   # Need so you know when to resize.
   def capacity
+    @store.length 
   end
 
   # Why can't we simply rely on StaticArray's checking of indices?
   def check_index(index)
+    raise "DynamicArray: index out of bounds" if index >= length || index < 0
   end
 
   # Double the size of the store when pushing or unshifting and it
